@@ -13,15 +13,15 @@ yarn start
 - Interactive file picker for running examples
 - Nodemon watch support
 
-Example File structure:
+Output File structure:
 
 ```
 src/
   __template/
-  _${id}_${slug}/
+  ${id}_${slug}/
     index.ts
     README.md
-  _${id2}_${slug2}/
+  ${id2}_${slug2}/
     index.ts
     README.md
   ...
