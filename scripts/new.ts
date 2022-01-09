@@ -118,6 +118,9 @@ const replaceTemplateParts = (
   replace.sync(replaceOptions)
 }
 
+const zeroPad = (num: number, places: number) =>
+  String(num).padStart(places, '0')
+
 const run = async () => {
   try {
     // https://leetcode.com/problems/container-with-most-water/
@@ -154,8 +157,10 @@ const run = async () => {
 
     const markdown = turndownService.turndown(content)
 
+    const paddedId = zeroPad(parseInt(id), 4)
+
     const templateData: LeetChallengeData = {
-      id,
+      id: paddedId,
       url: CHALLENGE_URL,
       title,
       category,
@@ -166,7 +171,7 @@ const run = async () => {
     }
 
     const templateDir = `${process.cwd()}/src/__template/*`
-    const newDir = `${process.cwd()}/src/_${id}_${slug}`
+    const newDir = `${process.cwd()}/src/${paddedId}_${slug}`
 
     shell.mkdir(newDir)
     shell.cp('-R', templateDir, newDir)

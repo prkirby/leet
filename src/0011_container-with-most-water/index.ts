@@ -3,7 +3,7 @@
  * Category: Algorithms
  * Difficulty: Medium
  * URL: https://leetcode.com/problems/container-with-most-water/
- * ID: 11
+ * ID: 0011
  * Created: Sun Jan 09 2022
  */
 
@@ -12,8 +12,8 @@ import run from '../utils'
 
 /** Main Code Snippet */
 function maxArea(height: number[]): number {
-  return 0
-}
+
+};
 
 run(() => {
   /**
