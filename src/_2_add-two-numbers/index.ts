@@ -1,41 +1,16 @@
 /**
  * Title: Add Two Numbers
- * Created: 01/07/2022
+ * Category: Algorithms
+ * Difficulty: Medium
  * URL: https://leetcode.com/problems/add-two-numbers/
+ * ID: 2
+ * Created: Sun Jan 09 2022
  */
 
-// ======================
-// Description
-// ======================
+import run from '../utils'
+import { printList } from '../utils/print-functions'
 
-// You are given two non-empty linked lists representing two non-negative integers.
-// The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.
-
-// You may assume the two numbers do not contain any leading zero, except the number 0 itself.
-
-// Example 1:
-
-// Input: l1 = [2,4,3], l2 = [5,6,4]
-// Output: [7,0,8]
-// Explanation: 342 + 465 = 807.
-// Example 2:
-
-// Input: l1 = [0], l2 = [0]
-// Output: [0]
-// Example 3:
-
-// Input: l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]
-// Output: [8,9,9,9,0,0,0,1]
-
-// Constraints:
-
-// The number of nodes in each linked list is in the range [1, 100].
-// 0 <= Node.val <= 9
-// It is guaranteed that the list represents a number that does not have leading zeros.
-
-import run from './utils'
-import { printList } from './utils/print-functions'
-
+/** Main Code Snippet */
 class ListNode {
   val: number
   next: ListNode | null
@@ -71,17 +46,17 @@ function adderHelper(
  * Write out to console here
  */
 function output(): void {
-  const listPair = [
+  const listPair: number[][] = [
     [2, 4, 3],
     [5, 6, 4],
   ]
 
   const listArray: [ListNode | null, ListNode | null] = [null, null]
-  for (const [index, list] of listPair.entries()) {
+  for (let i = 0; i < 2; i++) {
     let tmpNode,
       curNode,
       firstNode: ListNode | null = null
-    for (const val of list) {
+    for (const val of listPair[i]) {
       curNode = new ListNode(val)
       if (tmpNode) {
         tmpNode.next = curNode
@@ -90,14 +65,16 @@ function output(): void {
       }
       tmpNode = curNode
     }
-    listArray[index] = firstNode
+    listArray[i] = firstNode
   }
   printList(listArray[0])
   printList(listArray[1])
   printList(addTwoNumbers(listArray[0], listArray[1]))
 }
 
-;(() =>
-  run(() => {
-    output()
-  }))()
+run(() => {
+  /**
+   * Write out to console here
+   */
+  output()
+})

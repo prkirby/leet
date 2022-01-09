@@ -1,6 +1,6 @@
-interface ListNode {
+type ListNode = {
   val: any
-  next: ListNode
+  next: ListNode | null
 }
 
 export function printList(list: ListNode | null) {
