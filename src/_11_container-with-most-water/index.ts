@@ -2,7 +2,7 @@
  * Title: Container With Most Water
  * Category: Algorithms
  * Difficulty: Medium
- * URL: ttps://leetcode.com/problems/container-with-most-water/
+ * URL: https://leetcode.com/problems/container-with-most-water/
  * ID: 11
  * Created: Sun Jan 09 2022
  */
@@ -12,7 +12,7 @@ import run from '../utils'
 
 /** Main Code Snippet */
 function maxArea(height: number[]): number {
-  return 1
+  return 0
 }
 
 run(() => {

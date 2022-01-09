@@ -7,9 +7,10 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "clean": "rm -rf dist",
-    "build": "yarn clean && tsc",
-    "new": "yarn build && node ./dist/scripts/new",
+    "clean:scripts": "rm -rf dist/scripts",
+    "build:scripts": "yarn clean:scripts && tsc -p ./scripts",
+    "new": "yarn build:scripts && node ./bin/new",
+    "start": "yarn build:scripts && node ./bin/start",
     "test": "yarn build && node --experimental-specifier-resolution=node ./dist/src/_2_AddTwoNumbers"
   },
   "dependencies": {

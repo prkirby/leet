@@ -10,11 +10,20 @@ const log = console.log
 
 const turndownService = new TurndownService()
 
+/**
+ * 3D Diagonal
+ * Contessa
+ * Doh
+ * Diet Cola
+ * Graceful
+ */
+
 const init = () => {
+  // log(figlet.fontsSync())
   log(
     chalk.green(
       figlet.textSync('Leet Workspace Generator', {
-        font: 'Graceful',
+        font: 'Contessa',
         horizontalLayout: 'default',
         verticalLayout: 'default',
       })
