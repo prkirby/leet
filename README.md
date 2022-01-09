@@ -1,4 +1,4 @@
-# LeetCode Workspace
+# LeetCode Workspace Generator
 
 ```
 yarn install
