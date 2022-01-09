@@ -2,6 +2,7 @@
 
 ```
 yarn install
+yarn build:scripts
 yarn new
 yarn start
 ```
