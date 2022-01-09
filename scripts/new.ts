@@ -6,17 +6,11 @@ import shell from 'shelljs'
 import replace from 'replace-in-file'
 import TurndownService from 'turndown'
 
+import { NUM_PADDING } from './config'
+
 const log = console.log
 
 const turndownService = new TurndownService()
-
-/**
- * 3D Diagonal
- * Contessa
- * Doh
- * Diet Cola
- * Graceful
- */
 
 const init = () => {
   // log(figlet.fontsSync())
@@ -157,7 +151,7 @@ const run = async () => {
 
     const markdown = turndownService.turndown(content)
 
-    const paddedId = zeroPad(parseInt(id), 4)
+    const paddedId = zeroPad(parseInt(id), NUM_PADDING)
 
     const templateData: LeetChallengeData = {
       id: paddedId,
