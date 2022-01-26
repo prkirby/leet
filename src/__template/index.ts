@@ -18,10 +18,8 @@ import run from '../utils'
 // import { } from '../utils/print-functions'
 
 /** Main Code Snippet */
-//${CODE_SNIPPET}
+${CODE_SNIPPET}
 
-run(() => {
-  /**
-   * Write out to console here
-   */
-})
+const examples = []
+
+run(examples, MAIN_FUNC)

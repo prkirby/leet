@@ -5,13 +5,9 @@
   "main": "index.js",
   "author": "Paul Kirby <paulrdkirby@gmail.com>",
   "license": "MIT",
-  "type": "module",
   "scripts": {
-    "clean:scripts": "rm -rf dist/scripts",
-    "build:scripts": "yarn clean:scripts && tsc -p ./scripts",
-    "new": "node  --experimental-specifier-resolution=node ./bin/new",
-    "start": "node --experimental-specifier-resolution=node ./bin/start",
-    "test": "yarn build && node --experimental-specifier-resolution=node ./dist/src/_2_AddTwoNumbers"
+    "new": "ts-node scripts/new.ts",
+    "start": "ts-node scripts/start.ts"
   },
   "dependencies": {
     "@types/figlet": "^1.5.4",

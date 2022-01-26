@@ -1,10 +1,10 @@
-import chalk from 'chalk'
 import figlet from 'figlet'
 import inquirer, { QuestionCollection } from 'inquirer'
 import axios from 'axios'
 import shell from 'shelljs'
 import replace from 'replace-in-file'
 import TurndownService from 'turndown'
+import { URL } from 'url'
 
 import { NUM_PADDING } from './config'
 
@@ -15,19 +15,17 @@ const turndownService = new TurndownService()
 const init = () => {
   // log(figlet.fontsSync())
   log(
-    chalk.green(
-      figlet.textSync('Leet Workspace Generator', {
-        font: 'Contessa',
-        horizontalLayout: 'default',
-        verticalLayout: 'default',
-      })
-    )
+    figlet.textSync('Leet Workspace Generator', {
+      font: 'Contessa',
+      horizontalLayout: 'default',
+      verticalLayout: 'default',
+    })
   )
   log('\n')
 }
 
 const wrapUp = () => {
-  log(chalk.bgWhite.green('All set!'))
+  log('All set!')
 }
 
 const askQuestions = () => {
@@ -124,7 +122,7 @@ const run = async () => {
     const { CHALLENGE_URL } = await askQuestions()
 
     const url = new URL(CHALLENGE_URL)
-    const pathParts = url.pathname.split('/').filter((e) => e !== '')
+    const pathParts = url.pathname.split('/').filter((e: string) => e !== '')
     const slug = pathParts[pathParts.length - 1]
 
     const { question } = await getData(slug)
@@ -177,5 +175,10 @@ const run = async () => {
     console.error(error)
   }
 }
+
+process.on('SIGINT', () => {
+  console.log('Closing Leet Workspace Generator')
+  process.exit()
+})
 
 run()

@@ -99,14 +99,8 @@ const examples = [
   },
 ]
 
-run(() => {
-  /**
-   * Write out to console here
-   */
-  for (const example of examples) {
-    console.log(example, '\n')
-    const tree = btArrayToLink(example.array)
-    insertIntoBST(tree, example.val)
-    printBinaryTree(tree)
-  }
+run(examples, (example: { array: number[]; val: number }) => {
+  const tree = btArrayToLink(example.array)
+  insertIntoBST(tree, example.val)
+  printBinaryTree(tree)
 })

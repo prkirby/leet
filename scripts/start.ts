@@ -1,8 +1,7 @@
-import chalk from 'chalk'
 import inquirer, { QuestionCollection } from 'inquirer'
 import fs from 'fs'
-import nodemon from 'nodemon'
-import { spawn } from 'child_process'
+import process from 'process'
+import { ChildProcess, spawn } from 'child_process'
 import { exit } from 'process'
 
 import { NUM_PADDING } from './config'
@@ -18,7 +17,6 @@ const getDirectories = (source: string) =>
     .map((dir) => dir.name)
     .filter((dir) => RegExObj.test(dir))
     .sort((a, b) => {
-      console.log('hit sort')
       const aNums = parseInt(a.slice(0, NUM_PADDING))
       const bNums = parseInt(b.slice(0, NUM_PADDING))
 
@@ -40,9 +38,20 @@ const askQuestions = (directories: string[]) => {
   return inquirer.prompt(questions)
 }
 
-const run = async () => {
-  log(chalk.green(''))
+// https://github.com/remy/nodemon/blob/HEAD/doc/events.md#Using_nodemon_as_child_process
+function spawnNodemon(filePath: string, watchPath: string): ChildProcess {
+  const cp = spawn('nodemon', [filePath, '--watch', watchPath], {
+    // the important part is the 4th option 'ipc'
+    // this way `process.send` will be available in the child process (nodemon)
+    // so it can communicate back with parent process (through `.on()`, `.send()`)
+    // https://nodejs.org/api/child_process.html#child_process_options_stdio
+    stdio: ['pipe', 'pipe', 'pipe', 'ipc'],
+  })
 
+  return cp
+}
+
+const run = async () => {
   const directories = getDirectories(process.cwd() + '/src')
   if (!directories.length) {
     console.error('No directories found!')
@@ -50,55 +59,45 @@ const run = async () => {
   }
 
   const { DIRECTORY } = await askQuestions(directories)
-  log(chalk.green(`Starting up nodemon for ${DIRECTORY}...`))
 
-  const tsc = spawn('npx', [
-    'tsc',
-    '--watch',
-    `src/${DIRECTORY}/index.ts`,
-    '--esModuleInterop',
-    'true',
-    '--module',
-    'ES2015',
-    '--moduleResolution',
-    'node',
-    '--outDir',
-    'dist',
-  ])
+  const nodemonProcess = spawnNodemon(
+    `./src/${DIRECTORY}/index.ts`,
+    `./src/${DIRECTORY}/`
+  )
 
-  let startedNodemon = false
-
-  tsc.stdout.on('data', (data: string) => {
-    console.log(`TSC stdout: ${data}`)
-
-    if (
-      !startedNodemon &&
-      /Found 0 errors\. Watching for file changes/.test(data)
-    ) {
-      nodemon(`dist/${DIRECTORY}/index.js`)
-      startedNodemon = true
+  type NodemonMessage = {
+    type: string
+    data: {
+      message?: string
+      colour?: string
     }
+  }
+
+  // nodemonProcess.on('message', (event: NodemonMessage) => {
+  //   switch (event.type) {
+  //     case 'log':
+  //       console.log(event.data.colour ?? event.data.message)
+  //       break
+  //     default:
+  //       // console.log('unhandled message: ')
+  //       // console.dir(event)
+  //       break
+  //   }
+  // })
+
+  nodemonProcess.stdout?.on('data', (data) => {
+    console.log(data.toString(), '\n')
   })
 
-  tsc.on('close', (code) => {
-    console.log(`tsc process close all stdio with code ${code}`)
-  })
+  // force a restart
+  //nodemonProcess.send('restart')
 
-  tsc.on('exit', (code) => {
-    console.log(`tsc process exited with code ${code}`)
+  process.on('SIGINT', () => {
+    console.log('\nclosing time...')
+    // force a quit
+    nodemonProcess.send('quit')
+    process.exit()
   })
-
-  nodemon
-    .on('start', function () {
-      log(chalk.green(`${DIRECTORY} has started`))
-    })
-    .on('quit', function () {
-      log(chalk.red(`${DIRECTORY} has quit`))
-      process.exit()
-    })
-    .on('restart', function (files) {
-      log(`${DIRECTORY} restarted due to: `, files)
-    })
 }
 
 run()
