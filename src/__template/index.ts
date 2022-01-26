@@ -18,7 +18,7 @@ import run from '../utils'
 // import { } from '../utils/print-functions'
 
 /** Main Code Snippet */
-${CODE_SNIPPET}
+//${CODE_SNIPPET}
 
 const examples = []
 

@@ -1,20 +1,20 @@
-export type BTreeNode = {
+export type TreeNode = {
   val: number
-  left: BTreeNode | null
-  right: BTreeNode | null
+  left: TreeNode | null
+  right: TreeNode | null
 }
 
-export function btArrayToLink(array: Array<number | null>): BTreeNode {
-  const root: BTreeNode = {
+export function btArrayToLink(array: Array<number | null>): TreeNode {
+  const root: TreeNode = {
     val: array[0]!,
     left: null,
     right: null,
   }
 
-  function btArrayToLinkHelper(index: number, node: BTreeNode): BTreeNode {
+  function btArrayToLinkHelper(index: number, node: TreeNode): TreeNode {
     const left = index * 2 + 1
     const right = index * 2 + 2
-    if (array[left]) {
+    if (left < array.length && array[left] !== null) {
       node.left = btArrayToLinkHelper(left, {
         val: array[left]!,
         left: null,
@@ -22,7 +22,7 @@ export function btArrayToLink(array: Array<number | null>): BTreeNode {
       })
     }
 
-    if (array[right]) {
+    if (right < array.length && array[right] !== null) {
       node.right = btArrayToLinkHelper(right, {
         val: array[right]!,
         left: null,
@@ -36,7 +36,7 @@ export function btArrayToLink(array: Array<number | null>): BTreeNode {
   return btArrayToLinkHelper(0, root)
 }
 
-export function btLinkToArray(root: BTreeNode): Array<number> {
+export function btLinkToArray(root: TreeNode): Array<number> {
   const returnArray: number[] = []
   btLinkToArrayHelper(0, root, returnArray)
   return returnArray
@@ -44,7 +44,7 @@ export function btLinkToArray(root: BTreeNode): Array<number> {
 
 function btLinkToArrayHelper(
   index: number,
-  curNode: BTreeNode,
+  curNode: TreeNode,
   nodeArray: Array<number>
 ) {
   nodeArray[index] = curNode.val

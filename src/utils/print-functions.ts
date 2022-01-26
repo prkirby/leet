@@ -1,4 +1,4 @@
-import { BTreeNode, btLinkToArray } from './trees'
+import { TreeNode, btLinkToArray } from './trees'
 import { Graph, Vertex, Edge } from './graphs'
 
 type ListNode = {
@@ -16,7 +16,7 @@ export function printList(list: ListNode | null) {
   console.log(str + ']')
 }
 
-export function printBinaryTree(root: BTreeNode) {
+export function printBinaryTree(root: TreeNode) {
   const nodeArray = btLinkToArray(root)
   console.log(nodeArray)
 }

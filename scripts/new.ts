@@ -141,11 +141,15 @@ const run = async () => {
       code?: string
     } = {}
 
+    console.log(codeSnippets)
+
     if (codeSnippets.length) {
       codeSnippet = (codeSnippets as Array<any>).find(
         (el) => el.langSlug === 'typescript'
       )
     }
+
+    console.log(codeSnippet)
 
     const markdown = turndownService.turndown(content)
 
