@@ -149,8 +149,6 @@ const run = async () => {
       )
     }
 
-    console.log(codeSnippet)
-
     const markdown = turndownService.turndown(content)
 
     const paddedId = zeroPad(parseInt(id), NUM_PADDING)
