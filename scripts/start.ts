@@ -1,14 +1,20 @@
-import inquirer, { QuestionCollection } from 'inquirer'
+import inquirer from 'inquirer'
+import autocomplete, {
+  AutocompleteQuestionOptions,
+} from 'inquirer-autocomplete-prompt'
+import fuzzy from 'fuzzy'
 import fs from 'fs'
 import process from 'process'
 import { ChildProcess, spawn } from 'child_process'
 import { exit } from 'process'
 
 import { NUM_PADDING } from './config'
+import nodemon from 'nodemon'
 
-const log = console.log
 const regex = `^\\d{${NUM_PADDING}}_`
 const RegExObj = new RegExp(regex)
+
+inquirer.registerPrompt('autocomplete', autocomplete)
 
 const getDirectories = (source: string) =>
   fs
@@ -26,12 +32,15 @@ const getDirectories = (source: string) =>
     })
 
 const askQuestions = (directories: string[]) => {
-  const questions: QuestionCollection = [
+  const questions: Array<AutocompleteQuestionOptions> = [
     {
-      type: 'list',
+      type: 'autocomplete',
       name: 'DIRECTORY',
       message: 'Hey! Pick a Challenge 🕘',
-      choices: directories,
+      source: async (_answers, input) => {
+        const fuzzied = fuzzy.filter(input || '', directories)
+        return fuzzied.map((el) => el.string)
+      },
     },
   ]
 
@@ -65,28 +74,9 @@ const run = async () => {
     `./src/${DIRECTORY}/`
   )
 
-  type NodemonMessage = {
-    type: string
-    data: {
-      message?: string
-      colour?: string
-    }
-  }
-
-  // nodemonProcess.on('message', (event: NodemonMessage) => {
-  //   switch (event.type) {
-  //     case 'log':
-  //       console.log(event.data.colour ?? event.data.message)
-  //       break
-  //     default:
-  //       // console.log('unhandled message: ')
-  //       // console.dir(event)
-  //       break
-  //   }
-  // })
-
+  nodemonProcess.stdout?.setEncoding('utf8')
   nodemonProcess.stdout?.on('data', (data) => {
-    console.log(data.toString(), '\n')
+    console.log(data)
   })
 
   // force a restart
