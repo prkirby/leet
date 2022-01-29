@@ -17,7 +17,62 @@ Example Cases:
 
 import run from '../utils'
 import { large1 } from './examples'
+import { Stack } from '../utils/stack'
 // import { } from '../utils/print-functions'
+
+// https://en.wikipedia.org/wiki/Monotone_priority_queue
+
+//APPROACH 2 : Using Left-Smaller & Right-Smaller Arrays
+//https://leetcode.com/problems/largest-rectangle-in-histogram/discuss/1727605/C%2B%2B-Simple-Solution-or-Brute-Force-Optimal-or-W-Explanation
+function largestRectangleArea(heights: number[]): number {
+  if (!heights) return 0
+  const n = heights.length
+  if (n === 1) return heights[0]
+  let stack: Stack<number> = new Stack()
+  const leftBounds = new Array<number>(heights.length).fill(-1)
+  const rightBounds = new Array<number>(heights.length).fill(n - 1)
+
+  // Left smaller
+  for (let i = 0; i < n; i++) {
+    // clear stack indexes that are taller than current
+    while (!stack.empty() && heights[i] <= heights[stack.peek()!]) stack.pop()
+    if (stack.empty()) {
+      leftBounds[i] = 0
+    } else {
+      leftBounds[i] = stack.peek()! + 1
+    }
+    stack.push(i)
+  }
+
+  stack.clear()
+
+  // Right smaller
+  for (let i = n - 1; i >= 0; i--) {
+    // clear stack indexes that are taller than current
+    while (!stack.empty() && heights[i] <= heights[stack.peek()!]) stack.pop()
+    if (stack.empty()) {
+      rightBounds[i] = n - 1
+    } else {
+      rightBounds[i] = stack.peek()! - 1
+    }
+    stack.push(i)
+  }
+
+  // console.log(heights, leftBounds, rightBounds)
+
+  let max = 0
+  for (let i = 0; i < n; i++) {
+    max = Math.max(max, (rightBounds[i] - leftBounds[i] + 1) * heights[i])
+  }
+
+  // Calculate areas
+
+  return max
+}
+
+const examples = [[2, 1, 5, 6, 2, 3], [2, 4], [2], [2, 1, 2], [], [0, 9]]
+
+run(examples, largestRectangleArea)
 
 function printGrid(gridLength: number, gridHeight: number, heights: number[]) {
   let printGrid = ``
@@ -29,11 +84,6 @@ function printGrid(gridLength: number, gridHeight: number, heights: number[]) {
     printGrid += `${row}\n`
   }
   console.log(printGrid)
-}
-
-// https://en.wikipedia.org/wiki/Monotone_priority_queue
-function largestRectangleArea(heights: number[]): number {
-  return 0
 }
 
 /**
@@ -65,10 +115,6 @@ function largestRectangleAreaBrute2(heights: number[]): number {
   }
   return maxArea
 }
-
-const examples = [[2, 1, 5, 6, 2, 3], [2, 4], [2]]
-
-run(examples, largestRectangleArea)
 
 // OOPSIES
 function findLongestHorizontalBrute(row: boolean[]): number {
