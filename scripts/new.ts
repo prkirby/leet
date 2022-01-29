@@ -8,24 +8,22 @@ import { URL } from 'url'
 
 import { NUM_PADDING } from './config'
 
-const log = console.log
-
 const turndownService = new TurndownService()
 
 const init = () => {
   // log(figlet.fontsSync())
-  log(
+  console.log(
     figlet.textSync('Leet Workspace Generator', {
       font: 'Contessa',
       horizontalLayout: 'default',
       verticalLayout: 'default',
     })
   )
-  log('\n')
+  console.log('\n')
 }
 
 const wrapUp = () => {
-  log('All set!')
+  console.log('All set!')
 }
 
 const askQuestions = () => {
@@ -140,8 +138,6 @@ const run = async () => {
       langSlug?: string
       code?: string
     } = {}
-
-    console.log(codeSnippets)
 
     if (codeSnippets.length) {
       codeSnippet = (codeSnippets as Array<any>).find(
