@@ -1,17 +1,45 @@
 export default function run(examples: Array<any>, fn: Function) {
-  console.log('=============\nRunning Examples...\n=============')
-  for (const example of examples) {
-    logFunctionCall(example, fn)
-  }
-  console.log('=============\n...Done\n=============')
+  const out = `
+  ##############################################################
+  Running Examples...
+
+  ${(() => {
+    let examplesOut = ''
+    for (const example of examples) {
+      examplesOut += logFunctionCall(example, fn)
+    }
+    return examplesOut
+  })()}
+
+  ...Done
+  ##############################################################
+
+  `
+  console.log(out)
 }
 
-function logFunctionCall(example: any, fn: Function) {
-  const args = fn.length > 1 ? example : [example]
-  console.log('=======')
-  console.log('Input: ')
-  for (const arg of args) console.log(arg)
-  console.log('Output: ')
-  console.log(fn(...args))
-  console.log('=======\n')
+function logFunctionCall(example: any | any[], fn: Function) {
+  const args: any[] = fn.length > 1 ? example : [example]
+
+  return `
+    ========================================================
+    Input:
+    
+    ${logArgs(args)}
+        ----------------------------------------------------
+
+        Output:
+    
+        ${fn(...args)}
+
+  `
+}
+
+function logArgs(args: any[]) {
+  let out = ``
+  for (const arg of args) {
+    out += `${arg}
+    `
+  }
+  return out
 }
