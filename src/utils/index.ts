@@ -1,12 +1,17 @@
 export default function run(examples: Array<any>, fn: Function) {
-  console.log('=============\nSTART\n=============')
+  console.log('=============\nRunning Examples...\n=============')
   for (const example of examples) {
-    console.log('\n')
-    console.log('Input: ')
-    console.log(example.toString())
-    console.log('Output: ')
-    console.log(fn(example).toString())
-    console.log('\n')
+    logFunctionCall(example, fn)
   }
-  console.log('=============\nEND\n=============')
+  console.log('=============\n...Done\n=============')
+}
+
+function logFunctionCall(example: any, fn: Function) {
+  const args = fn.length > 1 ? example : [example]
+  console.log('=======')
+  console.log('Input: ')
+  for (const arg of args) console.log(arg)
+  console.log('Output: ')
+  console.log(fn(...args))
+  console.log('=======\n')
 }
